@@ -1,7 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+
+import CategoryForm from "@/app/v2/components/forms/CategoryForm";
 import Link from "next/link";
+
+import { DataGrid, GridToolbar , GridRowsProp, GridColDef } from "@mui/x-data-grid";
+
+import Modal from "@mui/material/Modal";
 
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -12,16 +17,31 @@ import ImageIcon from "@mui/icons-material/Image";
 import WorkIcon from "@mui/icons-material/Work";
 import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 
+import IconButton from "@mui/material/IconButton";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+
 export default function Home() {
   const [category, setCategory] = useState([]);
-  const { register, handleSubmit } = useForm();
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE
-  console.log(`${API_BASE}/category`)
+  const columns = [
+    { field: "name", headerName: "Category Name", width: 150 },
+    // { field: 'col2', headerName: 'Column 2', width: 150 },
+  ];
+
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+  console.log(`${API_BASE}/category`);
   async function fetchCategory() {
     const data = await fetch(`${API_BASE}/category`);
     const c = await data.json();
-    setCategory(c);
+    const c2 = c.map((category) => {
+      category.id = category._id;
+      return category;
+    });
+    setCategory(c2);
   }
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     fetchCategory();
@@ -39,7 +59,7 @@ export default function Home() {
 
   return (
     <main>
-      <form onSubmit={handleSubmit(createCategory)}>
+      {/* <form onSubmit={handleSubmit(createCategory)}>
         <div className="grid grid-cols-2 gap-4 w-fit m-4">
           <div>Category:</div>
           <div>
@@ -58,25 +78,27 @@ export default function Home() {
             />
           </div>
         </div>
-      </form>
+      </form> */}
       <div className="mx-4">
-        <h1>Category ({category.length})</h1>
-        <List>
-          {category.map((category) => (
-            <ListItem key={category._id}>
-              <ListItemAvatar>
-                <Avatar>
-                  <WorkIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText>
-                  {category.name}
-                <Link href={`/product/category/${category._id}`} className="text-red-600">
-                </Link>
-              </ListItemText>
-            </ListItem>
-          ))}
-        </List>
+        <span>Category ({category.length})</span>
+        <IconButton aria-label="new-category" color="secondary" onClick={handleOpen}>
+          <AddBoxIcon />
+        </IconButton>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <CategoryForm onSubmit={createCategory} />
+        </Modal>
+        <DataGrid
+          slots={{
+            toolbar: GridToolbar,
+          }}
+          rows={category}
+          columns={columns}
+        />
       </div>
     </main>
   );
