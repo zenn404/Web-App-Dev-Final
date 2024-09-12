@@ -12,6 +12,7 @@ export default function Home() {
 
   async function fetchProducts() {
     const data = await fetch(`${API_BASE}/product`);
+    // const data = await fetch(`http://localhost:3000/product`);
     const p = await data.json();
     setProducts(p);
   }
