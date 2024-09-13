@@ -135,7 +135,7 @@ export default function Home() {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <CategoryForm onSubmit={createCategory} />
+          <CategoryForm onSubmit={handleCategoryFormSubmit} />
         </Modal>
         <DataGrid
           slots={{
