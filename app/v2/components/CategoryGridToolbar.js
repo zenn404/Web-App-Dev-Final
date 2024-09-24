@@ -6,6 +6,8 @@ import {
   GridToolbarExport
 } from "@mui/x-data-grid";
 
+import Box from "@mui/material/Box";
+
 export default function CustomToolbar() {
   return (
     <GridToolbarContainer>
