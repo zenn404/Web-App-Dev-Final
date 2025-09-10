@@ -1,7 +1,8 @@
 import Product from "@/models/Product";
 
 export async function GET(request, { params }) {
-  const id = params.id;
+  console.log(params)
+  const id = params._id;
   const product = await Product.findById(id).populate("category");
   console.log({ product });
   return Response.json(product);

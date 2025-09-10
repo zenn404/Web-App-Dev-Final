@@ -27,7 +27,7 @@ export default function Home() {
     // { field: 'col2', headerName: 'Column 2', width: 150 },
   ];
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL;
   console.log(`${API_BASE}/category`);
   async function fetchCategory() {
     const data = await fetch(`${APIBASE}/category`);
